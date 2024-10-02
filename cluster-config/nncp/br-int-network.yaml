@@ -9,7 +9,7 @@ spec:
       description: |-
         A dedicated OVS bridge with enp2s0 as a port
       type: ovs-bridge
-      state: up
+      state: down
       ipv4:
         dhcp: true
         enabled: true        
@@ -25,4 +25,4 @@ spec:
       bridge-mappings:
       - localnet: br0-network
         bridge: br0 
-        state: present
+        state: down
