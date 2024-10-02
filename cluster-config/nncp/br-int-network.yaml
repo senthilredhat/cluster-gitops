@@ -25,4 +25,4 @@ spec:
       bridge-mappings:
       - localnet: br0-network
         bridge: br0 
-        state: down
+        state: absent
