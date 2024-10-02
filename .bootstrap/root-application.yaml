@@ -8,7 +8,7 @@ spec:
   goTemplateOptions: ["missingkey=error"]
   generators:
     - git:
-        repoURL: git@github.com:senthilredhat/cluster-gitops.git
+        repoURL: https://github.com/senthilredhat/cluster-gitops.git
         revision: main
         directories:
           - path: cluster-config/*
@@ -18,7 +18,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: git@github.com:senthilredhat/cluster-gitops.git
+        repoURL: https://github.com/senthilredhat/cluster-gitops.git
         targetRevision: HEAD
         path: '{{.path.path}}'
       destination:
