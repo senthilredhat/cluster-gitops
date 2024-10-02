@@ -1,0 +1,28 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: br0-ovs
+spec:
+  desiredState:
+    interfaces:
+    - name: br0 
+      description: |-
+        A dedicated OVS bridge with enp2s0 as a port
+      type: ovs-bridge
+      state: up
+      ipv4:
+        dhcp: true
+        enabled: true        
+      ipv6:
+        enabled: false  
+      bridge:
+        allow-extra-patch-ports: true
+        options:
+          stp: true
+        port:
+        - name: enp2s0
+    ovn:
+      bridge-mappings:
+      - localnet: br0-network
+        bridge: br0 
+        state: present
