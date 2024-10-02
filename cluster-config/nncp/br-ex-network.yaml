@@ -1,11 +1,11 @@
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
-metadata:
-  name: br-ex-network
-spec:
-  desiredState:
-    ovn:
-      bridge-mappings:
-        - bridge: br-ex
-          localnet: br-ex-network
-          state: present
+# apiVersion: nmstate.io/v1
+# kind: NodeNetworkConfigurationPolicy
+# metadata:
+#   name: br-ex-network
+# spec:
+#   desiredState:
+#     ovn:
+#       bridge-mappings:
+#         - bridge: br-ex
+#           localnet: br-ex-network
+#           state: present
