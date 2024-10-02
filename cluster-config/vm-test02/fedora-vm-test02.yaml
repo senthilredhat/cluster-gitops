@@ -78,7 +78,7 @@ spec:
       terminationGracePeriodSeconds: 180
       volumes:
         - dataVolume:
-            name: fedora-copper-hippopotamus-21
+            name: fedora-vm-test02
           name: rootdisk
         - cloudInitNoCloud:
             userData: |-
