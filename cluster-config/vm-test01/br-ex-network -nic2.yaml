@@ -4,4 +4,4 @@ metadata:
   name: vm-br-network
   namespace: vm-test01
 spec:
-  config: '{"name":"vm-br-network","type":"ovn-k8s-cni-overlay","cniVersion":"0.4.0","topology":"localnet","netAttachDefName":"vm-test01/vm-br-network", "mtu": 1500}'
+  config: '{"name":"vm-br-network","type":"ovn-k8s-cni-overlay","cniVersion":"0.4.0","topology":"localnet","netAttachDefName":"vm-test01/vm-br-network","mtu":1500}'
