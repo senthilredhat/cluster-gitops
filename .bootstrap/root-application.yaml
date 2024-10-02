@@ -12,6 +12,8 @@ spec:
         revision: main
         directories:
           - path: cluster-config/*
+            ignore: 
+              - 'cluster-config/vm-test02/'
   template:
     metadata:
       name: '{{.path.basename}}'
@@ -28,5 +30,5 @@ spec:
         syncOptions:
           - CreateNamespace=true      
         automated:
-          prune: true
+          prune: false
           selfHeal: true
