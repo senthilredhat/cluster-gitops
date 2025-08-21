@@ -11,7 +11,7 @@ spec:
         repoURL: https://github.com/senthilredhat/cluster-gitops.git
         revision: main
         directories:
-          - path: cluster-gitops/clusters/mocp/day2/*
+          - path: clusters/mocp/day2/*
   template:
     metadata:
       name: '{{.path.basename}}'
