@@ -15,3 +15,9 @@ oc apply -f .bootstrap/cluster-rolebinding.yaml
 oc apply -f .bootstrap/argocd.yaml
 envsubst < .bootstrap/root-application.yaml | oc apply -f -
 ```
+
+
+```sh
+oc patch storageclass lvms-vg1 -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+
+```

@@ -1,7 +1,7 @@
 apiVersion: lvm.topolvm.io/v1alpha1
 kind: LVMCluster
 metadata:
-  name: test-lvmcluster
+  name: sda-lvmcluster
   namespace: openshift-storage
 spec:
   storage:
@@ -9,7 +9,7 @@ spec:
       - deviceSelector:
           paths:
             - /dev/nvme0n1
-        fstype: xfs
+            - /dev/sda
         name: vg1
         thinPoolConfig:
           chunkSizeCalculationPolicy: Static
