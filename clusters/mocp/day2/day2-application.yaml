@@ -12,6 +12,8 @@ spec:
         revision: main
         directories:
           - path: clusters/mocp/day2/*
+            ignore: 
+              - 'clusters/mocp/day2/openshift-cnv/'
   template:
     metadata:
       name: '{{.path.basename}}'
