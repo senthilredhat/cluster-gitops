@@ -9,7 +9,6 @@ spec:
       - deviceSelector:
           paths:
             - /dev/nvme0n1
-            - /dev/sda
         name: vg1
         thinPoolConfig:
           chunkSizeCalculationPolicy: Static
