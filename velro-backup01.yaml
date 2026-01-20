@@ -1,0 +1,32 @@
+apiVersion: oadp.openshift.io/v1alpha1
+kind: DataProtectionApplication
+metadata:
+  name: velero-home-lan
+  namespace: openshift-adp
+spec:
+  configuration:
+    nodeAgent:
+      enable: true
+      uploaderType: kopia # 'kopia' is faster/better than 'restic' for VMs
+    velero:
+      defaultPlugins:
+        - aws
+        - openshift
+        - csi
+        - kubevirt # <--- CRITICAL for your VMs
+      resourceTimeout: 10m
+  backupLocations:
+    - name: default
+      velero:
+        provider: aws
+        default: true
+        objectStorage:
+          bucket: openshift-backup
+          prefix: velero
+        config:
+          region: minio
+          s3ForcePathStyle: "true"
+          s3Url: http://192.168.1.193:9000
+        credential:
+          key: cloud
+          name: cloud-credentials
