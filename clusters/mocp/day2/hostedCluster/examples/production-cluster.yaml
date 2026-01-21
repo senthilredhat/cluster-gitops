@@ -1,0 +1,26 @@
+# Example: Production Cluster with High Availability
+# Usage: helm install prod01 ../hostedCluster -f production-cluster.yaml
+
+cluster:
+  name: "prod01"
+  rootDomain: "production.example.com"
+
+nodePool:
+  replicas: 5
+  compute:
+    cores: 16
+    memory: 64
+  rootVolume:
+    persistent:
+      size: "500Gi"
+
+etcd:
+  storage:
+    size: "16Gi"
+
+highAvailability:
+  controllerAvailabilityPolicy: "HighlyAvailable"
+  infrastructureAvailabilityPolicy: "HighlyAvailable"
+
+autoscaling:
+  scaling: "ScaleUpAndScaleDown"

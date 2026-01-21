@@ -1,0 +1,7 @@
+I am setting up a new SingleNode openshift Cluster. The cluster is up and running. In the cluster I have two operators installed manyally. LVMSTorage Operator and RedHatOpenShift Gitops Operator.
+
+An Application set is also applied on the cluster cluster-gitops/clusters/cluster01/day2-application.yaml
+
+I want to use gitops way of deploying additional compoents into the cluster. With the applicationSet cluster-gitops/clusters/cluster01/day2-application.yaml installed, every folder in cluster-gitops/clusters/cluster01/ should create a new namespace and any yaml in that folder will be applied to the cluster.
+
+I want to install OpenShiftVirtualization operator to the cluster using the gitops. Generate appropriate yaml files and place it under cluster-gitops/clusters/cluster01 and push the changes to git  

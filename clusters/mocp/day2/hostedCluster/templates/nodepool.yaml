@@ -1,0 +1,44 @@
+apiVersion: hypershift.openshift.io/v1beta1
+kind: NodePool
+metadata:
+  name: {{ include "hostedcluster.nodePoolName" . }}
+  namespace: {{ .Values.cluster.namespace }}
+  labels:
+    {{- include "hostedcluster.labels" . | nindent 4 }}
+    {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  clusterName: {{ include "hostedcluster.clusterName" . }}
+  replicas: {{ .Values.nodePool.replicas }}
+
+  management:
+    autoRepair: {{ .Values.nodePool.autoRepair }}
+    upgradeType: {{ .Values.nodePool.upgradeType }}
+
+  platform:
+    type: KubeVirt
+    kubevirt:
+      compute:
+        cores: {{ .Values.nodePool.compute.cores }}
+        memory: {{ .Values.nodePool.compute.memory }}Gi
+      rootVolume:
+        {{- if eq .Values.nodePool.rootVolume.type "Persistent" }}
+        persistent:
+          size: {{ .Values.nodePool.rootVolume.persistent.size }}
+          storageClass: {{ .Values.nodePool.rootVolume.persistent.storageClass }}
+        {{- end }}
+        type: {{ .Values.nodePool.rootVolume.type }}
+      {{- if .Values.nodePool.network.additionalNetworks }}
+      additionalNetworks:
+      {{- range .Values.nodePool.network.additionalNetworks }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}
+
+  release:
+    image: {{ .Values.cluster.releaseImage }}

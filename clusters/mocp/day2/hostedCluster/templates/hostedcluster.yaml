@@ -1,0 +1,93 @@
+apiVersion: hypershift.openshift.io/v1beta1
+kind: HostedCluster
+metadata:
+  name: {{ include "hostedcluster.clusterName" . }}
+  namespace: {{ .Values.cluster.namespace }}
+  labels:
+    {{- include "hostedcluster.labels" . | nindent 4 }}
+    cluster.open-cluster-management.io/clusterset: {{ .Values.cluster.clusterSet }}
+    {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  autoscaling:
+    scaling: {{ .Values.autoscaling.scaling }}
+
+  capabilities: {}
+
+  controllerAvailabilityPolicy: {{ .Values.highAvailability.controllerAvailabilityPolicy }}
+
+  dns:
+    baseDomain: {{ include "hostedcluster.baseDomain" . }}
+
+  etcd:
+    managed:
+      storage:
+        persistentVolume:
+          size: {{ .Values.etcd.storage.size }}
+          storageClassName: {{ .Values.etcd.storage.storageClassName }}
+        type: PersistentVolume
+    managementType: Managed
+
+  fips: {{ .Values.cluster.fips }}
+
+  infrastructureAvailabilityPolicy: {{ .Values.highAvailability.infrastructureAvailabilityPolicy }}
+
+  networking:
+    clusterNetwork:
+    {{- range .Values.networking.clusterNetwork }}
+    - cidr: {{ .cidr }}
+    {{- end }}
+    networkType: {{ .Values.networking.networkType }}
+    serviceNetwork:
+    {{- range .Values.networking.serviceNetwork }}
+    - cidr: {{ .cidr }}
+    {{- end }}
+
+  olmCatalogPlacement: {{ .Values.cluster.olmCatalogPlacement }}
+
+  platform:
+    kubevirt:
+      baseDomainPassthrough: {{ .Values.cluster.baseDomainPassthrough }}
+      credentials:
+        infraKubeConfigSecret:
+          key: kubeconfig
+          name: {{ include "hostedcluster.infraKubeConfigSecretName" . }}
+        infraNamespace: {{ .Values.infrastructure.namespace }}
+    type: KubeVirt
+
+  pullSecret:
+    name: {{ include "hostedcluster.pullSecretName" . }}
+
+  release:
+    image: {{ .Values.cluster.releaseImage }}
+
+  secretEncryption:
+    aescbc:
+      activeKey:
+        name: {{ include "hostedcluster.etcdEncryptionKeyName" . }}
+    type: aescbc
+
+  services:
+  - service: OAuthServer
+    servicePublishingStrategy:
+      type: {{ .Values.services.oauthServer.type }}
+  - service: OIDC
+    servicePublishingStrategy:
+      type: {{ .Values.services.oidc.type }}
+  - service: Konnectivity
+    servicePublishingStrategy:
+      type: {{ .Values.services.konnectivity.type }}
+  - service: Ignition
+    servicePublishingStrategy:
+      type: {{ .Values.services.ignition.type }}
+  - service: APIServer
+    servicePublishingStrategy:
+      type: {{ .Values.services.apiServer.type }}
+
+  sshKey:
+    name: {{ include "hostedcluster.sshKeyName" . }}

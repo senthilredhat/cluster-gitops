@@ -1,0 +1,14 @@
+apiVersion: v2
+name: hostedcluster
+description: A Helm chart for deploying OpenShift Hosted Clusters using Multi Cluster Engine and OpenShift Virtualization
+type: application
+version: 1.0.0
+appVersion: "4.20.10"
+keywords:
+  - openshift
+  - hosted-cluster
+  - hypershift
+  - multi-cluster-engine
+  - kubevirt
+maintainers:
+  - name: Platform Team

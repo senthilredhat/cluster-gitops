@@ -1,0 +1,186 @@
+# Default values for hostedcluster Helm chart
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Cluster Configuration
+cluster:
+  # Name of the hosted cluster (REQUIRED)
+  # This will be used for cluster name and in DNS
+  name: "demo01"
+
+  # Namespace where hosted cluster resources will be created
+  namespace: "clusters"
+
+  # Base domain for the cluster
+  # If not specified, defaults to: <cluster.name>.skumars.net
+  # The full domain will be: apps.<baseDomain>
+  baseDomain: ""
+
+  # Use custom base domain or auto-generate from cluster name
+  # When true: baseDomain = <cluster.name>.skumars.net
+  # When false: use the baseDomain value specified above
+  autoBaseDomain: true
+
+  # Root domain (used when autoBaseDomain is true)
+  rootDomain: "skumars.net"
+
+  # BaseDomainPassthrough - should be false for independent domains with LoadBalancer
+  # Set to true only if you want to route through the management cluster's ingress (uses NodePort)
+  baseDomainPassthrough: false
+
+  # OpenShift release image
+  releaseImage: "quay.io/openshift-release-dev/ocp-release:4.20.10-multi"
+
+  # FIPS mode
+  fips: false
+
+  # OLM catalog placement (management or guest)
+  olmCatalogPlacement: "management"
+
+  # Cluster set label
+  clusterSet: "default"
+
+# Infrastructure Configuration
+infrastructure:
+  # KubeVirt infrastructure namespace where VMs will be created
+  namespace: "mocp"
+
+  # Name of the secret containing kubeconfig for the infrastructure cluster
+  # This secret should already exist in cluster.namespace
+  # Format: infra-cluster-<cluster.name> (auto-generated if useAutoSecretNames is true)
+  infraKubeConfigSecretName: ""
+
+  # Automatically generate secret names based on cluster name
+  # When true, uses: infra-cluster-<cluster.name>
+  useAutoSecretNames: true
+
+# Secrets Configuration
+secrets:
+  # Pull secret name
+  # This secret should already exist in cluster.namespace
+  # Format: pullsecret-cluster-<cluster.name> (auto-generated if useAutoSecretNames is true)
+  pullSecretName: ""
+
+  # SSH key secret name
+  # This secret should already exist in cluster.namespace
+  # Format: sshkey-cluster-<cluster.name> (auto-generated if useAutoSecretNames is true)
+  sshKeyName: ""
+
+  # Automatically generate secret names based on cluster name
+  # When true, uses patterns like: pullsecret-cluster-<cluster.name>
+  useAutoSecretNames: true
+
+  # Create etcd encryption key secret automatically
+  # If false, you must create the secret manually before installing the chart
+  createEtcdEncryptionKey: true
+
+# etcd Configuration
+etcd:
+  # Storage configuration for etcd
+  storage:
+    # Storage class name
+    storageClassName: "lvms-vg1"
+
+    # PVC size for etcd
+    size: "8Gi"
+
+# Networking Configuration
+networking:
+  # Cluster network CIDR
+  clusterNetwork:
+    - cidr: "10.132.0.0/14"
+
+  # Service network CIDR
+  serviceNetwork:
+    - cidr: "172.31.0.0/16"
+
+  # Network type (OVNKubernetes or OpenShiftSDN)
+  networkType: "OVNKubernetes"
+
+# Service Publishing Strategy
+services:
+  # API Server publishing strategy
+  apiServer:
+    type: "LoadBalancer"
+
+  # OAuth Server publishing strategy
+  oauthServer:
+    type: "Route"
+
+  # OIDC publishing strategy
+  oidc:
+    type: "Route"
+
+  # Konnectivity publishing strategy
+  konnectivity:
+    type: "Route"
+
+  # Ignition server publishing strategy
+  ignition:
+    type: "Route"
+
+# Node Pool Configuration
+nodePool:
+  # Name of the node pool
+  # If not specified, defaults to: <cluster.name>-pool
+  name: ""
+
+  # Number of worker nodes
+  replicas: 2
+
+  # Auto repair
+  autoRepair: false
+
+  # Upgrade type (Replace or InPlace)
+  upgradeType: "Replace"
+
+  # Compute resources for each node
+  compute:
+    # Number of CPU cores per node
+    cores: 4
+
+    # Memory per node (in Gi)
+    memory: 16
+
+  # Root volume configuration
+  rootVolume:
+    # Volume type (Persistent or Container)
+    type: "Persistent"
+
+    # Persistent volume settings (only used when type is Persistent)
+    persistent:
+      # Storage class for node root volumes
+      storageClass: "lvms-vg1"
+
+      # Size of root volume per node
+      size: "120Gi"
+
+  # Network configuration
+  network:
+    # Additional networks to attach to the nodes
+    # This is used to expose nodes to external networks via Network Attachment Definitions
+    additionalNetworks: []
+      # Example:
+      # - name: "default/br-ex-network"
+
+# High Availability Configuration
+highAvailability:
+  # Controller availability policy (SingleReplica or HighlyAvailable)
+  controllerAvailabilityPolicy: "SingleReplica"
+
+  # Infrastructure availability policy (SingleReplica or HighlyAvailable)
+  infrastructureAvailabilityPolicy: "SingleReplica"
+
+# Autoscaling Configuration
+autoscaling:
+  # Scaling policy (ScaleUpAndScaleDown, ScaleUpOnly, Disabled)
+  scaling: "ScaleUpAndScaleDown"
+
+# Labels and Annotations
+labels: {}
+  # Custom labels for the HostedCluster resource
+  # example-label: "value"
+
+annotations: {}
+  # Custom annotations for the HostedCluster resource
+  # example-annotation: "value"

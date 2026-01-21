@@ -1,0 +1,69 @@
+🎉 Hosted Cluster "{{ include "hostedcluster.clusterName" . }}" has been deployed!
+
+📋 Cluster Details:
+  Name:         {{ include "hostedcluster.clusterName" . }}
+  Namespace:    {{ .Values.cluster.namespace }}
+  Base Domain:  {{ include "hostedcluster.baseDomain" . }}
+  Console URL:  https://console-openshift-console.apps.{{ include "hostedcluster.baseDomain" . }}
+  API URL:      https://api.{{ include "hostedcluster.baseDomain" . }}:6443
+
+⏳ The cluster is being provisioned. This typically takes 10-20 minutes.
+
+📊 Monitor cluster creation progress:
+
+  # Watch cluster status
+  oc get hostedcluster {{ include "hostedcluster.clusterName" . }} -n {{ .Values.cluster.namespace }} -w
+
+  # Check control plane pods
+  oc get pods -n clusters-{{ include "hostedcluster.clusterName" . }}
+
+  # Check node pool status
+  oc get nodepool {{ include "hostedcluster.nodePoolName" . }} -n {{ .Values.cluster.namespace }}
+
+✅ Once the cluster shows AVAILABLE=True:
+
+  1. Extract the kubeconfig:
+     oc extract secret/{{ include "hostedcluster.clusterName" . }}-admin-kubeconfig \
+       -n {{ .Values.cluster.namespace }} \
+       --to=- > /tmp/{{ include "hostedcluster.clusterName" . }}-kubeconfig
+
+  2. Get the kubeadmin password:
+     oc extract secret/{{ include "hostedcluster.clusterName" . }}-kubeadmin-password \
+       -n {{ .Values.cluster.namespace }} \
+       --to=-
+
+  3. Get the ingress LoadBalancer IP:
+     oc --kubeconfig=/tmp/{{ include "hostedcluster.clusterName" . }}-kubeconfig \
+       get service router-default \
+       -n openshift-ingress \
+       -o jsonpath='{.status.loadBalancer.ingress[0].ip}{"\n"}'
+
+🌐 DNS Configuration Required:
+
+  You need to configure DNS records for the cluster:
+
+  {{ if .Values.cluster.baseDomainPassthrough }}
+  ⚠️  WARNING: baseDomainPassthrough is enabled. The cluster will use the management
+      cluster's ingress with NodePorts. For standard ports (80/443), set
+      baseDomainPassthrough to false and use LoadBalancer.
+  {{ else }}
+  Add these DNS records (replace <INGRESS-IP> with the IP from step 3 above):
+
+    api.{{ include "hostedcluster.baseDomain" . }}          IN A    <API-LOADBALANCER-IP>
+    *.apps.{{ include "hostedcluster.baseDomain" . }}       IN A    <INGRESS-IP>
+
+  For local testing, you can use /etc/hosts or dnsmasq.
+  {{ end }}
+
+📚 For more information, see the README.md in the chart directory.
+
+🔍 Troubleshooting:
+
+  # Check cluster events
+  oc describe hostedcluster {{ include "hostedcluster.clusterName" . }} -n {{ .Values.cluster.namespace }}
+
+  # Check for errors in control plane
+  oc logs -n clusters-{{ include "hostedcluster.clusterName" . }} -l app=control-plane-operator
+
+  # Verify all required secrets exist
+  oc get secret -n {{ .Values.cluster.namespace }} | grep {{ include "hostedcluster.clusterName" . }}

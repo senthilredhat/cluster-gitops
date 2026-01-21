@@ -1,0 +1,20 @@
+# Example: Small Development Cluster
+# Usage: helm install dev01 ../hostedCluster -f dev-cluster.yaml
+
+cluster:
+  name: "smcluster01"
+  # baseDomain will auto-generate to: dev01.skumars.net
+
+nodePool:
+  replicas: 1
+  compute:
+    cores: 2
+    memory: 8
+  rootVolume:
+    persistent:
+      size: "60Gi"
+  network:
+    additionalNetworks:
+      - "default/br-ex-network"
+secrets:
+  createEtcdEncryptionKey: false

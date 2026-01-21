@@ -1,0 +1,22 @@
+# Example: Cluster with Custom Domain
+# Usage: helm install custom01 ../hostedCluster -f custom-domain.yaml
+
+cluster:
+  name: "custom01"
+  autoBaseDomain: false
+  baseDomain: "ocp.mycompany.com"
+
+nodePool:
+  replicas: 3
+  compute:
+    cores: 8
+    memory: 32
+  rootVolume:
+    persistent:
+      storageClass: "fast-ssd"
+      size: "250Gi"
+
+etcd:
+  storage:
+    storageClassName: "fast-ssd"
+    size: "12Gi"
