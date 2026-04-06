@@ -1,0 +1,13 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: mta-operator
+  namespace: openshift-mta
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  channel: stable-v8.1
+  installPlanApproval: Automatic
+  name: mta-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace

@@ -1,0 +1,22 @@
+apiVersion: tackle.konveyor.io/v1alpha1
+kind: Tackle
+metadata:
+  name: tackle
+  namespace: openshift-mta
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  feature_auth_required: "true"
+  feature_isolate_namespace: "false"
+  hub_bucket_volume_size: "25Gi"
+  rwx_storage_class: "lvms-vg1"
+  rwo_storage_class: "lvms-vg1"
+  maven_data_volume_size: "10Gi"
+  analyzer_container_limits_cpu: "1"
+  analyzer_container_limits_memory: "4Gi"
+  analyzer_container_requests_cpu: "500m"
+  analyzer_container_requests_memory: "2Gi"
+  hub_container_limits_cpu: "2"
+  hub_container_limits_memory: "4Gi"
+  hub_container_requests_cpu: "500m"
+  hub_container_requests_memory: "2Gi"
