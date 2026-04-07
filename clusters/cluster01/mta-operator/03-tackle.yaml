@@ -21,3 +21,7 @@ spec:
   hub_container_limits_memory: "4Gi"
   hub_container_requests_cpu: "500m"
   hub_container_requests_memory: "2Gi"
+  kai_llm_proxy_enabled: true
+  kai_solution_server_enabled: true
+  kai_llm_provider: OpenAI
+  kai_llm_model: codellama-7b-instruct 
