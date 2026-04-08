@@ -7,3 +7,5 @@ VM-Netowrk/3-Sep30/policy.yaml
 .bootstrap/secrets/git-repo.yaml
 credentials-velero
 .gitignore
+clusters/cluster01/devspaces/github-oauth-config.yaml
+clusters/cluster01/maven-settings.yaml
